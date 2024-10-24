@@ -1,0 +1,48 @@
+/* Header.css */
+.header-menubar {
+    background-color: #ffffff; /* Azul similar al logo */
+    border: none;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+body {
+    padding-top: 80px; /* Espacio para evitar que el contenido quede detrás del header */
+}
+
+.p-button-text.p-button-black {
+    color: #ffffff; /* Texto blanco para los botones */
+}
+
+.p-menubar-root-list > li > .p-menuitem-link {
+    color: #ffffff; /* Color blanco para los ítems del menú */
+}
+
+.menu-item-custom {
+    color: #ffffff; /* Color blanco para los botones de Inicio, Servicios y Acerca de Nosotros */
+    font-weight: bold; /* Negrita para resaltar */
+    transition: background-color 0.3s; /* Transición suave al pasar el ratón */
+}
+
+.menu-item-custom:hover {
+    background-color: #333333; /* Fondo gris oscuro al pasar el ratón */
+}
+
+.menu-item-custom2-container {
+    margin-left: auto; /* Mueve los botones de Iniciar Sesión y Registrarse hacia la derecha */
+    display: flex;
+    align-items: center;
+}
+
+.menu-item-custom2 {
+    color: #4e4e4e; 
+    font-weight: bold; /* Negrita para resaltar */
+    transition: background-color 0.3s; /* Transición suave al pasar el ratón */
+    margin-right: 10px; /* Espaciado entre los botones de Iniciar Sesión y Registrarse */
+}
+
+.menu-item-custom2:hover {
+    background-color: #ffffff; /* Fondo gris oscuro al pasar el ratón */
+}

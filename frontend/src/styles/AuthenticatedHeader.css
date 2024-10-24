@@ -1,0 +1,49 @@
+/* AuthenticatedHeader.css */
+
+.authenticated-header-menubar {
+    background-color: #ffffff; /* Fondo blanco similar al estilo del logo */
+    border: none;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    z-index: 1000;
+}
+
+.p-menubar-root-list > li > .p-menuitem-link {
+    color: #333; /* Color de texto gris oscuro */
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.p-menubar-root-list > li > .p-menuitem-link:hover {
+    color: #007bff; /* Color azul al pasar el ratón */
+}
+
+.authenticated-menu-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.p-button-rounded.p-button-text {
+    color: #4e4e4e; /* Color del ícono del usuario */
+}
+
+.p-button-rounded.p-button-text:hover {
+    background-color: #f0f0f0;
+}
+
+.p-avatar {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .authenticated-header-menubar {
+        padding: 10px;
+    }
+
+    .authenticated-menu-container {
+        gap: 5px;
+    }
+}

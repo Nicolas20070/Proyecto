@@ -1,0 +1,71 @@
+/* Register.css */
+
+
+
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #4e4e4e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold; /* Negrita para resaltar */
+    text-decoration: none;
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
+
+.register-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #ffffff;
+    width: 25rem;
+    max-width: 90%; /* Ajustar para evitar scroll horizontal en pantallas pequeñas */
+    margin-top: 20px; /* Agregar espacio superior para separar del borde */
+}
+
+.p-field {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.register-input {
+    width: calc(100% - 1.5rem);
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+.p-password {
+    width: 100%;
+}
+
+.p-field-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.p-field-checkbox label {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.register-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .register-card {
+        width: 100%;
+        padding: 1.5rem;
+    }
+}

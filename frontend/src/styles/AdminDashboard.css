@@ -1,0 +1,76 @@
+/* AdminDashboard.css */
+
+.admin-dashboard-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+.admin-dashboard-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.dashboard-summary {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.dashboard-card {
+    width: 300px;
+    margin: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.dashboard-card p {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    color: #007bff;
+}
+
+.dashboard-chart {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.chart {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.dashboard-table {
+    margin-bottom: 40px;
+}
+
+.datatable {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .dashboard-summary {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard-card {
+        width: 90%;
+    }
+
+    .chart {
+        width: 100%;
+    }
+
+    .datatable {
+        width: 100%;
+    }
+}
