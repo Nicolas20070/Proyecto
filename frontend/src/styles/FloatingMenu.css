@@ -1,0 +1,36 @@
+/* FloatingMenu.css */
+
+.floating-menu {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.p-speeddial {
+    --button-bg: #007bff;
+    --button-bg-hover: #0056b3;
+    --button-icon-color: #ffffff;
+}
+
+.p-speeddial-action {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.p-speeddial-action:hover {
+    background-color: #0056b3;
+}
+
+.p-speeddial-action .p-button-label {
+    display: none;
+}
+
+.p-speeddial-action:hover .p-button-label {
+    display: inline;
+    margin-left: 8px;
+    color: #ffffff;
+    font-weight: bold;
+}

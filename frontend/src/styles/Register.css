@@ -24,9 +24,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     background-color: #ffffff;
-    width: 25rem;
-    max-width: 90%; /* Ajustar para evitar scroll horizontal en pantallas pequeñas */
-    margin-top: 20px; /* Agregar espacio superior para separar del borde */
+    max-width: 100%; /* Ajustar para evitar scroll horizontal en pantallas pequeñas */
 }
 
 .p-field {

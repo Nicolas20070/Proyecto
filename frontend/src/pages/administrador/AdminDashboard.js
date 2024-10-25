@@ -44,7 +44,7 @@ function AdminDashboard() {
                 </Card>
                 <Card title='Ingresos' className='dashboard-card'>
                     <p>$15,000</p>
-                    <Button label='Ver Detalles' className='p-button-secondary' onClick={() => navigate('/procesos_a')} />
+                    <Button label='Ver Detalles' className='p-button-secondary' onClick={() => navigate('/ingresos')} />
                 </Card>
                 <Card title='Inventario' className='dashboard-card'>
                     <p>Gestión de Inventario</p>
@@ -54,9 +54,9 @@ function AdminDashboard() {
                     <p>Gestión del Personal</p>
                     <Button label='Ver Detalles' className='p-button-secondary' onClick={() => navigate('/personal_a')} />
                 </Card>
-                <Card title='Peticiones' className='dashboard-card'>
-                    <p>Solicitudes Pendientes</p>
-                    <Button label='Ver Detalles' className='p-button-secondary' onClick={() => navigate('/peticiones_a')} />
+                <Card title='Procesos' className='dashboard-card'>
+                    <p>Gestión de Procesos</p>
+                    <Button label='Ver Detalles' className='p-button-secondary' onClick={() => navigate('/procesos')} />
                 </Card>
                 <Card title='Servicios' className='dashboard-card'>
                     <p>Servicios Ofrecidos</p>

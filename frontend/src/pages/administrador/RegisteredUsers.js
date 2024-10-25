@@ -1,49 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import React, { useState } from 'react';
+import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
+import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
-import AuthenticatedHeader from '../../components/AuthenticatedHeader';
-import '../../styles/AdminDashboard.css';
+import { Link } from 'react-router-dom';
+import '../../styles/Register.css';
 
-function RegisteredUsers() {
-    const [users, setUsers] = useState([]);
+function Register() {
+  const [formData, setFormData] = useState({
+    nombre: '',
+    apellido: '',
+    tipoDocumento: null,
+    numeroDocumento: '',
+    numeroTelefono: '',
+    email: '',
+    nombreUsuario: '',
+    contrasena: '',
+    confirmarContrasena: '',
+  });
 
-    useEffect(() => {
-        // Simular llamada a API para obtener los usuarios registrados
-        const fetchedUsers = [
-            { id: 1, username: 'admin', email: 'admin@example.com', role: 'Administrador' },
-            { id: 2, username: 'usuario1', email: 'user1@example.com', role: 'Usuario' },
-            { id: 3, username: 'usuario2', email: 'user2@example.com', role: 'Usuario' },
-        ];
-        setUsers(fetchedUsers);
-    }, []);
+  const tiposDocumento = [
+    { label: 'Cédula de Ciudadanía', value: 'Cedula' },
+    { label: 'Tarjeta de Identidad', value: 'Tarjeta' },
+    { label: 'Cédula de Extranjería', value: 'Extranjeria' },
+    { label: 'Pasaporte', value: 'Pasaporte' }
+  ];
 
-    const deleteUser = (userId) => {
-        // Implementar lógica para eliminar usuario
-        const updatedUsers = users.filter(user => user.id !== userId);
-        setUsers(updatedUsers);
-    };
+  const handleInputChange = (e, name) => {
+    const value = e.target.value;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    const actionBodyTemplate = (rowData) => {
-        return (
-            <Button label="Eliminar" icon="pi pi-trash" className="p-button-danger" onClick={() => deleteUser(rowData.id)} />
-        );
-    };
+  return (
+    <div className='register-container'>
+      <Link to='/' className='p-button p-component p-button-secondary home-button'>
+        <span className='p-button-icon pi pi-arrow-left'></span>
+        <span className='p-button-label'>Volver a Inicio</span>
+      </Link>
 
-    return (
-        <div className='registered-users-container'>
-            <AuthenticatedHeader />
-            <h1>Usuarios Registrados</h1>
-            <div className='datatable-wrapper'>
-                <DataTable value={users} paginator rows={5} className='registered-users-table'>
-                    <Column field='username' header='Usuario' />
-                    <Column field='email' header='Correo Electrónico' />
-                    <Column field='role' header='Rol' />
-                    <Column body={actionBodyTemplate} header='Acciones' />
-                </DataTable>
-            </div>
+      <Card title='Registrarse' className='register-card'>
+        <div className='p-field'>
+          <label htmlFor='nombre'>Nombre</label>
+          <InputText id='nombre' value={formData.nombre} onChange={(e) => handleInputChange(e, 'nombre')} placeholder='Ingrese su nombre' />
         </div>
-    );
+
+        <div className='p-field'>
+          <label htmlFor='apellido'>Apellido</label>
+          <InputText id='apellido' value={formData.apellido} onChange={(e) => handleInputChange(e, 'apellido')} placeholder='Ingrese su apellido' />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='tipoDocumento'>Tipo de Documento</label>
+          <Dropdown id='tipoDocumento' value={formData.tipoDocumento} options={tiposDocumento} onChange={(e) => handleInputChange(e, 'tipoDocumento')} placeholder='Seleccione tipo de documento' />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='numeroDocumento'>Número de Documento</label>
+          <InputText id='numeroDocumento' value={formData.numeroDocumento} onChange={(e) => handleInputChange(e, 'numeroDocumento')} placeholder='Ingrese el número de documento' />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='numeroTelefono'>Número de Teléfono</label>
+          <InputText id='numeroTelefono' value={formData.numeroTelefono} onChange={(e) => handleInputChange(e, 'numeroTelefono')} placeholder='Ingrese su número de teléfono' />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='email'>Correo Electrónico</label>
+          <InputText id='email' value={formData.email} onChange={(e) => handleInputChange(e, 'email')} placeholder='Ingrese su correo electrónico' />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='nombreUsuario'>Nombre de Usuario</label>
+          <InputText id='nombreUsuario' value={formData.nombreUsuario} onChange={(e) => handleInputChange(e, 'nombreUsuario')} placeholder='Ingrese su nombre de usuario' />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='contrasena'>Contraseña</label>
+          <Password id='contrasena' value={formData.contrasena} onChange={(e) => handleInputChange(e, 'contrasena')} placeholder='Ingrese su contraseña' feedback={false} toggleMask />
+        </div>
+
+        <div className='p-field'>
+          <label htmlFor='confirmarContrasena'>Confirmar Contraseña</label>
+          <Password id='confirmarContrasena' value={formData.confirmarContrasena} onChange={(e) => handleInputChange(e, 'confirmarContrasena')} placeholder='Confirme su contraseña' feedback={false} toggleMask />
+        </div>
+
+        <Button label='Registrarse' className='p-button-primary register-button' />
+      </Card>
+    </div>
+  );
 }
 
-export default RegisteredUsers;
+export default Register;

@@ -1,0 +1,176 @@
+/* RegisteredUsers.css */
+
+/* Contenedor principal */
+.registered-users-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+.registered-users-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Datatable contenedor */
+.datatable-wrapper {
+    margin-top: 2rem;
+}
+
+/* Barra de herramientas de la datatable */
+.datatable-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* Botones de acción */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Tabla de usuarios registrados */
+.registered-users-table {
+    margin: 0 auto;
+    max-width: 900px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Diálogos */
+.p-dialog .p-dialog-content {
+    text-align: left;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ffffff, #f0f4f7);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.p-dialog .p-dialog-header {
+    background-color: #4a90e2;
+    color: #ffffff;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.p-dialog .p-dialog-footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #f0f4f7;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Formulario de edición de usuario */
+.dialog-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dialog-edit-form label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.dialog-edit-form input,
+.dialog-edit-form select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones de la datatable */
+.p-button-info, .p-button-warning, .p-button-danger {
+    margin-right: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Input y Dropdown del filtro */
+.p-input-icon-left {
+    width: 300px;
+}
+
+.p-dropdown {
+    width: 200px;
+}
+
+/* Botón volver al inicio */
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
+
+/* Mejora de visualización para dispositivos móviles */
+@media (max-width: 600px) {
+    .registered-users-container {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .registered-users-table {
+        width: 100%;
+    }
+
+    .datatable-toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* Botones en el diálogo */
+.p-dialog-footer .p-button {
+    margin-top: 1rem;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+/* Estilo de los diálogos de información y edición */
+.dialog-info {
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dialog-info p {
+    margin: 0.5rem 0;
+}
+
+.dialog-info label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}

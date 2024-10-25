@@ -1,0 +1,77 @@
+/* Personal.css */
+
+.personal-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.personal-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.datatable-wrapper {
+    margin-top: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.p-dialog .p-field {
+    margin-bottom: 1rem;
+}
+
+.p-dialog .p-dropdown,
+.p-dialog .p-inputtext,
+.p-dialog .p-calendar {
+    width: 100%;
+}
+
+.p-button-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.p-button-success:hover {
+    background-color: #218838;
+}
+
+.p-button-warning {
+    background-color: #ffc107;
+    border: none;
+}
+
+.p-button-warning:hover {
+    background-color: #e0a800;
+}
+
+.p-button-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.p-button-danger:hover {
+    background-color: #c82333;
+}
+
+.p-dialog .p-button-text {
+    color: #007bff;
+}
+
+.p-dialog .p-button-text:hover {
+    color: #0056b3;
+    background-color: transparent;
+}
+
+.p-toolbar {
+    margin-bottom: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}

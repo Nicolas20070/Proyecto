@@ -1,0 +1,65 @@
+/* CitasDelMes.css */
+
+.citas-del-mes-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.citas-del-mes-container h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.datatable-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.p-input-icon-left {
+    display: flex;
+    align-items: center;
+}
+
+.datatable-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.citas-del-mes-table {
+    width: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.p-calendar {
+    margin-left: 10px;
+}
+
+.p-button-info {
+    background-color: #42A5F5;
+    border: none;
+}
+
+.p-button-info:hover {
+    background-color: #1E88E5;
+}
+
+.floating-menu-wrapper {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}

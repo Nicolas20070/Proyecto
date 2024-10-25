@@ -1,59 +1,122 @@
 import React, { useState } from 'react';
-import { Card } from 'primereact/card';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
+import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
-import { Checkbox } from 'primereact/checkbox';
-import { Link } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
 import '../styles/Register.css';
 
-function Register() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [termsAccepted, setTermsAccepted] = useState(false);
+function RegisteredUsers() {
+  const [users, setUsers] = useState([
+    { id: 1, usuario: 'admin', email: 'admin@example.com', rol: 'Administrador' },
+    { id: 2, usuario: 'usuario1', email: 'user1@example.com', rol: 'Usuario' },
+    { id: 3, usuario: 'usuario2', email: 'user2@example.com', rol: 'Usuario' },
+  ]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
+  const [userToView, setUserToView] = useState(null);
 
-  const handleRegister = () => {
-    // Implementar lógica de registro aquí
-    console.log('Usuario:', username);
-    console.log('Correo Electrónico:', email);
-    console.log('Contraseña:', password);
-    console.log('Confirmar Contraseña:', confirmPassword);
-    console.log('Términos Aceptados:', termsAccepted);
+  const roles = [
+    { label: 'Todos', value: null },
+    { label: 'Administrador', value: 'Administrador' },
+    { label: 'Usuario', value: 'Usuario' }
+  ];
+
+  const onEditUser = (user) => {
+    setUserToEdit(user);
+    setShowEditDialog(true);
   };
 
+  const onViewUser = (user) => {
+    setUserToView(user);
+    setShowInfoDialog(true);
+  };
+
+  const onDeleteUser = (userId) => {
+    setUsers(users.filter(user => user.id !== userId));
+  };
+
+  const dialogFooter = (
+    <div>
+      <Button label="Cerrar" icon="pi pi-times" onClick={() => setShowInfoDialog(false)} className="p-button-text" />
+    </div>
+  );
+
+  const editDialogFooter = (
+    <div>
+      <Button label="Guardar" icon="pi pi-check" onClick={() => setShowEditDialog(false)} className="p-button-primary" />
+      <Button label="Cancelar" icon="pi pi-times" onClick={() => setShowEditDialog(false)} className="p-button-secondary" />
+    </div>
+  );
+
   return (
-    <div className='register-container'>
-      <Link to='/' className='p-button p-component p-button-secondary home-button'>
-        <span className='p-button-icon pi pi-arrow-left'></span>
-        <span className='p-button-label'>Volver a Inicio</span>
-      </Link>
-      <Card title='Registrarse' className='register-card' style={{ width: '25rem', margin: '0 auto', padding: '2rem' }}>
-        <div className='p-field'>
-          <label htmlFor='username'>Nombre de Usuario</label>
-          <InputText id='username' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Ingrese su nombre de usuario' className='register-input' />
+    <div>
+        <AuthenticatedHeader/>
+        <FloatingMenu/>
+        <div className='registered-users-container'>
+          <h1>Usuarios Registrados</h1>
+          <div className='datatable-toolbar'>
+            <span className='p-input-icon-left'>
+              <i className='pi pi-search' />
+              <InputText type='search' value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder='Buscar...' />
+            </span>
+            <Dropdown value={selectedRole} options={roles} onChange={(e) => setSelectedRole(e.value)} placeholder='Filtrar por Rol' />
+          </div>
+          <div className='datatable-wrapper'>
+            <DataTable value={users} paginator rows={5} globalFilter={globalFilter} className='registered-users-table'>
+              <Column field='usuario' header='Usuario' sortable></Column>
+              <Column field='email' header='Correo Electrónico' sortable></Column>
+              <Column field='rol' header='Rol' sortable></Column>
+              <Column
+                header='Acciones'
+                body={(rowData) => (
+                  <div className='action-buttons'>
+                    <Button icon='pi pi-eye' className='p-button-info' onClick={() => onViewUser(rowData)} />
+                    <Button icon='pi pi-pencil' className='p-button-warning' onClick={() => onEditUser(rowData)} />
+                    <Button icon='pi pi-trash' className='p-button-danger' onClick={() => onDeleteUser(rowData.id)} />
+                  </div>
+                )}
+              ></Column>
+            </DataTable>
+          </div>
+
+          <Dialog header='Detalles del Usuario' visible={showInfoDialog} style={{ width: '50vw' }} footer={dialogFooter} onHide={() => setShowInfoDialog(false)}>
+            {userToView && (
+              <div className='dialog-info'>
+                <p><label>Usuario:</label> {userToView.usuario}</p>
+                <p><label>Correo Electrónico:</label> {userToView.email}</p>
+                <p><label>Rol:</label> {userToView.rol}</p>
+              </div>
+            )}
+          </Dialog>
+
+          <Dialog header='Editar Usuario' visible={showEditDialog} style={{ width: '60vw' }} footer={editDialogFooter} onHide={() => setShowEditDialog(false)}>
+            {userToEdit && (
+              <div className='dialog-edit-form'>
+                <div className='form-field-wrapper'>
+                  <div className='p-field'>
+                    <label htmlFor='username'>Nombre de Usuario</label>
+                    <InputText id='username' value={userToEdit.usuario} onChange={(e) => setUserToEdit({ ...userToEdit, usuario: e.target.value })} />
+                  </div>
+                  <div className='p-field'>
+                    <label htmlFor='email'>Correo Electrónico</label>
+                    <InputText id='email' value={userToEdit.email} onChange={(e) => setUserToEdit({ ...userToEdit, email: e.target.value })} />
+                  </div>
+                  <div className='p-field'>
+                    <label htmlFor='rol'>Rol</label>
+                    <Dropdown id='rol' value={userToEdit.rol} options={roles.filter(role => role.value !== null)} onChange={(e) => setUserToEdit({ ...userToEdit, rol: e.value })} placeholder='Seleccionar Rol' />
+                  </div>
+                </div>
+              </div>
+            )}
+          </Dialog>
         </div>
-        <div className='p-field'>
-          <label htmlFor='email'>Correo Electrónico</label>
-          <InputText id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Ingrese su correo electrónico' className='register-input' />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='password'>Contraseña</label>
-          <Password id='password' value={password} onChange={(e) => setPassword(e.target.value)} feedback={false} toggleMask placeholder='Ingrese su contraseña' className='register-input' />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='confirmPassword'>Confirmar Contraseña</label>
-          <Password id='confirmPassword' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} feedback={false} toggleMask placeholder='Confirme su contraseña' className='register-input' />
-        </div>
-        <div className='p-field-checkbox'>
-          <Checkbox inputId='termsAccepted' checked={termsAccepted} onChange={(e) => setTermsAccepted(e.checked)} />
-          <label htmlFor='termsAccepted'>Acepto los términos y condiciones</label>
-        </div>
-        <Button label='Registrarse' className='p-button-primary register-button' onClick={handleRegister} />
-      </Card>
     </div>
   );
 }
 
-export default Register;
+export default RegisteredUsers;
