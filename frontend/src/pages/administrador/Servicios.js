@@ -4,31 +4,51 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { Toolbar } from 'primereact/toolbar';
 import { Dropdown } from 'primereact/dropdown';
-import FloatingMenu from '../../components/FloatingMenu';
+import { InputTextarea } from 'primereact/inputtextarea';
 import AuthenticatedHeader from '../../components/AuthenticatedHeader';
+import FloatingMenu from '../../components/FloatingMenu';
 import '../../styles/Services.css';
 
 function Services() {
   const [services, setServices] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState('');
   const [serviceDialog, setServiceDialog] = useState(false);
   const [viewServiceDialog, setViewServiceDialog] = useState(false);
-  const [deleteServiceDialog, setDeleteServiceDialog] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [service, setService] = useState({ nombre: '', descripcion: '', valor: '', repuestos: '', duracion: '', imagen: '' });
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [categoriaFiltro, setCategoriaFiltro] = useState(null);
+  const [estadoFiltro, setEstadoFiltro] = useState(null);
+  const [service, setService] = useState({
+    nombre: '', descripcion: '', precio: '', duracion_estimada: '', categoria: '', estado: 'Activo'
+  });
+
+  const categorias = [
+    { label: 'Mantenimiento Preventivo', value: 'Mantenimiento Preventivo' },
+    { label: 'Reparación', value: 'Reparación' },
+    { label: 'Diagnóstico', value: 'Diagnóstico' },
+    { label: 'Personalización', value: 'Personalización' },
+  ];
+
+  const estados = [
+    { label: 'Activo', value: 'Activo' },
+    { label: 'Inactivo', value: 'Inactivo' },
+  ];
 
   useEffect(() => {
     setServices([
-      { id: 1, nombre: 'Cambio de Aceite', descripcion: 'Cambio completo de aceite y filtro', valor: 120, repuestos: 'Aceite, Filtro de Aceite', duracion: '1 hora', imagen: 'https://via.placeholder.com/150' },
-      { id: 2, nombre: 'Alineación y Balanceo', descripcion: 'Alineación de ruedas y balanceo de neumáticos', valor: 80, repuestos: 'Plomos de Balanceo', duracion: '1.5 horas', imagen: 'https://via.placeholder.com/150' },
-      // Agrega más servicios aquí
+      { servicio_id: 1, nombre: 'Cambio de Aceite', descripcion: 'Cambio de aceite y filtro', precio: 120.00, duracion_estimada: '01:00:00', categoria: 'Mantenimiento Preventivo', estado: 'Activo' },
+      { servicio_id: 2, nombre: 'Revisión General', descripcion: 'Inspección completa del vehículo', precio: 250.00, duracion_estimada: '02:30:00', categoria: 'Diagnóstico', estado: 'Activo' },
+      { servicio_id: 3, nombre: 'Reparación de Frenos', descripcion: 'Cambio de pastillas de freno', precio: 150.00, duracion_estimada: '01:30:00', categoria: 'Reparación', estado: 'Activo' },
+      { servicio_id: 4, nombre: 'Pintura Personalizada', descripcion: 'Aplicación de pintura personalizada', precio: 500.00, duracion_estimada: '05:00:00', categoria: 'Personalización', estado: 'Activo' },
+      { servicio_id: 5, nombre: 'Cambio de Bujías', descripcion: 'Cambio de bujías y ajuste del motor', precio: 180.00, duracion_estimada: '01:15:00', categoria: 'Mantenimiento Preventivo', estado: 'Inactivo' },
+      { servicio_id: 6, nombre: 'Diagnóstico Eléctrico', descripcion: 'Evaluación completa del sistema eléctrico', precio: 220.00, duracion_estimada: '02:00:00', categoria: 'Diagnóstico', estado: 'Activo' },
+      { servicio_id: 7, nombre: 'Alineación y Balanceo', descripcion: 'Ajuste de alineación y balanceo de ruedas', precio: 140.00, duracion_estimada: '01:45:00', categoria: 'Mantenimiento Preventivo', estado: 'Inactivo' },
+      { servicio_id: 8, nombre: 'Reparación de Transmisión', descripcion: 'Reparación y ajuste de transmisión', precio: 750.00, duracion_estimada: '04:00:00', categoria: 'Reparación', estado: 'Activo' },
     ]);
   }, []);
 
-  const openNew = () => {
-    setService({ nombre: '', descripcion: '', valor: '', repuestos: '', duracion: '', imagen: '' });
+  const openNewService = () => {
+    setService({ nombre: '', descripcion: '', precio: '', duracion_estimada: '', categoria: '', estado: 'Activo' });
     setSelectedService(null);
     setServiceDialog(true);
   };
@@ -37,21 +57,17 @@ function Services() {
     setServiceDialog(false);
   };
 
-  const hideViewServiceDialog = () => {
+  const hideViewDialog = () => {
     setViewServiceDialog(false);
-  };
-
-  const hideDeleteServiceDialog = () => {
-    setDeleteServiceDialog(false);
   };
 
   const saveService = () => {
     let _services = [...services];
     if (selectedService) {
-      const index = _services.findIndex((s) => s.id === selectedService.id);
-      _services[index] = service;
+      const index = _services.findIndex((s) => s.servicio_id === selectedService.servicio_id);
+      _services[index] = { ...service, servicio_id: selectedService.servicio_id };
     } else {
-      service.id = Math.floor(Math.random() * 1000) + 1;
+      service.servicio_id = services.length ? Math.max(...services.map(s => s.servicio_id)) + 1 : 1;
       _services.push(service);
     }
     setServices(_services);
@@ -69,132 +85,108 @@ function Services() {
     setViewServiceDialog(true);
   };
 
-  const confirmDeleteService = (service) => {
-    setService(service);
-    setDeleteServiceDialog(true);
-  };
+  const filteredServices = services.filter(service => 
+    (!categoriaFiltro || service.categoria === categoriaFiltro) &&
+    (!estadoFiltro || service.estado === estadoFiltro)
+  );
 
-  const deleteService = () => {
-    let _services = services.filter((s) => s.id !== service.id);
-    setServices(_services);
-    setDeleteServiceDialog(false);
-    setService({ nombre: '', descripcion: '', valor: '', repuestos: '', duracion: '', imagen: '' });
-  };
+  const header = (
+    <div className="table-header">
+      <Button icon="pi pi-plus" className="p-button-rounded p-button-success" onClick={openNewService} tooltip="Nuevo Servicio" />
+      <Dropdown
+        value={categoriaFiltro}
+        options={categorias}
+        onChange={(e) => setCategoriaFiltro(e.value)}
+        placeholder="Filtrar por Categoría"
+      />
+      <Dropdown
+        value={estadoFiltro}
+        options={estados}
+        onChange={(e) => setEstadoFiltro(e.value)}
+        placeholder="Filtrar por Estado"
+      />
+      <InputText
+        value={globalFilter}
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        placeholder="Buscar Servicio..."
+        className="p-input-icon-left"
+      />
+    </div>
+  );
+
+  const actionTemplate = (rowData) => (
+    <div className="action-buttons">
+      <Button icon="pi pi-eye" className="p-button-rounded p-button-info mr-2" onClick={() => viewService(rowData)} />
+      <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning mr-2" onClick={() => editService(rowData)} />
+    </div>
+  );
 
   return (
-    <div>
-        <AuthenticatedHeader/>
-    <div className='services-container'>
-      <h1>Gestión de Servicios</h1>
-      <Toolbar className='mb-4' right={() => (
-        <Button label='Nuevo Servicio' icon='pi pi-plus' className='p-button-success' onClick={openNew} />
-      )}></Toolbar>
-      <div className='datatable-wrapper'>
-        <DataTable value={services} paginator rows={5} globalFilter={globalFilter} header={<InputText type='search' value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder='Buscar Servicio...' />}>
-          <Column field='nombre' header='Nombre' sortable></Column>
-          <Column field='valor' header='Valor' sortable></Column>
-          <Column field='duracion' header='Duración' sortable></Column>
-          <Column
-            header='Acciones'
-            body={(rowData) => (
-              <div className='action-buttons'>
-                <Button icon='pi pi-eye' className='p-button-rounded p-button-info mr-2' onClick={() => viewService(rowData)} />
-                <Button icon='pi pi-pencil' className='p-button-rounded p-button-warning mr-2' onClick={() => editService(rowData)} />
-                <Button icon='pi pi-trash' className='p-button-rounded p-button-danger' onClick={() => confirmDeleteService(rowData)} />
-              </div>
-            )}
-          ></Column>
-        </DataTable>
-      </div>
-      <Dialog visible={serviceDialog} header={selectedService ? 'Editar Servicio' : 'Nuevo Servicio'} modal className='p-fluid' style={{ width: '800px' }} footer={
-        <>
-          <Button label='Cancelar' icon='pi pi-times' className='p-button-text' onClick={hideDialog} />
-          <Button label='Guardar' icon='pi pi-check' className='p-button-text' onClick={saveService} />
-        </>
-      } onHide={hideDialog}>
-        <div className='dialog-content'>
-          <div className='dialog-left'>
-            <div className='p-field'>
-              <label htmlFor='nombre'>Nombre</label>
-              <InputText id='nombre' value={service.nombre} onChange={(e) => setService({ ...service, nombre: e.target.value })} required autoFocus />
+    <div className="services-container">
+      <AuthenticatedHeader/>
+      <FloatingMenu/>
+
+      <DataTable value={filteredServices} paginator rows={4} globalFilter={globalFilter} header={header} emptyMessage="No se encontraron servicios">
+        <Column field="nombre" header="Nombre" sortable />
+        <Column field="precio" header="Precio" sortable body={(rowData) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(rowData.precio)} />
+        <Column field="duracion_estimada" header="Duración Estimada" sortable />
+        <Column field="categoria" header="Categoría" sortable />
+        <Column field="estado" header="Estado" sortable />
+        <Column body={actionTemplate} header="Acciones" />
+      </DataTable>
+
+      {/* Dialogo para agregar o editar servicio */}
+      <Dialog visible={serviceDialog} header={selectedService ? 'Editar Servicio' : 'Nuevo Servicio'} modal style={{ width: '60vw' }} onHide={hideDialog}>
+        <div className="form-grid">
+          <div className="form-col">
+            <div className="p-field">
+              <label htmlFor="nombre">Nombre</label>
+              <InputText id="nombre" value={service.nombre} onChange={(e) => setService({ ...service, nombre: e.target.value })} required autoFocus />
             </div>
-            <div className='p-field'>
-              <label htmlFor='descripcion'>Descripción</label>
-              <InputText id='descripcion' value={service.descripcion} onChange={(e) => setService({ ...service, descripcion: e.target.value })} required />
+            <div className="p-field">
+              <label htmlFor="descripcion">Descripción</label>
+              <InputTextarea id="descripcion" value={service.descripcion} onChange={(e) => setService({ ...service, descripcion: e.target.value })} required rows={3} />
             </div>
-            <div className='p-field'>
-              <label htmlFor='valor'>Valor</label>
-              <InputText id='valor' value={service.valor} onChange={(e) => setService({ ...service, valor: e.target.value })} required />
-            </div>
-            <div className='p-field'>
-              <label htmlFor='repuestos'>Repuestos</label>
-              <InputText id='repuestos' value={service.repuestos} onChange={(e) => setService({ ...service, repuestos: e.target.value })} required />
-            </div>
-            <div className='p-field'>
-              <label htmlFor='duracion'>Duración</label>
-              <InputText id='duracion' value={service.duracion} onChange={(e) => setService({ ...service, duracion: e.target.value })} required />
+            <div className="p-field">
+              <label htmlFor="precio">Precio</label>
+              <InputText id="precio" value={service.precio} onChange={(e) => setService({ ...service, precio: e.target.value })} />
             </div>
           </div>
-          <div className='dialog-right'>
-            <div className='p-field'>
-              <label htmlFor='imagen'>Imagen URL</label>
-              <InputText id='imagen' value={service.imagen} onChange={(e) => setService({ ...service, imagen: e.target.value })} required />
+          <div className="form-col">
+            <div className="p-field">
+              <label htmlFor="duracion_estimada">Duración Estimada</label>
+              <InputText id="duracion_estimada" value={service.duracion_estimada} onChange={(e) => setService({ ...service, duracion_estimada: e.target.value })} />
             </div>
-            <div className='image-preview'>
-              <img src={service.imagen} alt={service.nombre} />
+            <div className="p-field">
+              <label htmlFor="categoria">Categoría</label>
+              <Dropdown id="categoria" value={service.categoria} options={categorias} onChange={(e) => setService({ ...service, categoria: e.value })} placeholder="Seleccione categoría" />
+            </div>
+            <div className="p-field">
+              <label htmlFor="estado">Estado</label>
+              <Dropdown id="estado" value={service.estado} options={estados} onChange={(e) => setService({ ...service, estado: e.value })} placeholder="Seleccione estado" />
             </div>
           </div>
         </div>
-      </Dialog>
-      <Dialog visible={viewServiceDialog} header='Detalle del Servicio' modal className='p-fluid' style={{ width: '1000px' }} footer={
-        <>
-          <Button label='Cerrar' icon='pi pi-times' className='p-button-text' onClick={hideViewServiceDialog} />
-        </>
-      } onHide={hideViewServiceDialog}>
-        <div className='dialog-content'>
-          <div className='dialog-left'>
-            <div className='p-field'>
-              <h3>Nombre</h3>
-              <p>{service.nombre}</p>
-            </div>
-            <div className='p-field'>
-              <h3>Descripción</h3>
-              <p>{service.descripcion}</p>
-            </div>
-            <div className='p-field'>
-              <h3>Valor</h3>
-              <p>${service.valor}</p>
-            </div>
-            <div className='p-field'>
-              <h3>Repuestos</h3>
-              <p>{service.repuestos}</p>
-            </div>
-            <div className='p-field'>
-              <h3>Duración</h3>
-              <p>{service.duracion}</p>
-            </div>
-          </div>
-          <div className='dialog-right'>
-            <div className='p-field'>
-              <h3>Imagen</h3>
-              <a href={service.imagen} target='_blank' rel='noopener noreferrer'>{service.imagen}</a>
-              <div className='image-preview'>
-                <img src={service.imagen} alt={service.nombre} />
-              </div>
-            </div>
-          </div>
+        <div className="dialog-footer">
+          <Button label="Cancelar" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+          <Button label="Guardar" icon="pi pi-check" className="p-button-primary" onClick={saveService} />
         </div>
       </Dialog>
-      <Dialog visible={deleteServiceDialog} header='Confirmar Eliminación' modal footer={
-        <>
-          <Button label='No' icon='pi pi-times' className='p-button-text' onClick={hideDeleteServiceDialog} />
-          <Button label='Sí' icon='pi pi-check' className='p-button-text' onClick={deleteService} />
-        </>
-      } onHide={hideDeleteServiceDialog}>
-        <p>¿Está seguro de que desea eliminar el servicio <strong>{service.nombre}</strong>?</p>
+
+      {/* Dialogo para ver detalle de servicio */}
+      <Dialog visible={viewServiceDialog} header="Detalle del Servicio" modal style={{ width: '50vw' }} onHide={hideViewDialog}>
+        {service && (
+          <div>
+            <p><strong>Nombre:</strong> {service.nombre}</p>
+            <p><strong>Descripción:</strong> {service.descripcion}</p>
+            <p><strong>Precio:</strong> {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(service.precio)}</p>
+            <p><strong>Duración Estimada:</strong> {service.duracion_estimada}</p>
+            <p><strong>Categoría:</strong> {service.categoria}</p>
+            <p><strong>Estado:</strong> {service.estado}</p>
+            <Button label="Cerrar" icon="pi pi-times" onClick={hideViewDialog} />
+          </div>
+        )}
       </Dialog>
-      <FloatingMenu />
-    </div>
     </div>
   );
 }

@@ -11,177 +11,114 @@ import '../../styles/Vehicles.css';
 
 function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState('');
-  const [vehicleDialog, setVehicleDialog] = useState(false);
   const [viewVehicleDialog, setViewVehicleDialog] = useState(false);
-  const [deleteVehicleDialog, setDeleteVehicleDialog] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [vehicle, setVehicle] = useState({ marca: '', modelo: '', anio: '', placa: '', propietario: '', tipo: '' });
-  const vehicleTypes = [
-    { label: 'Sedán', value: 'Sedán' },
-    { label: 'SUV', value: 'SUV' },
-    { label: 'Coupe', value: 'Coupe' },
-    { label: 'Convertible', value: 'Convertible' },
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [marcaFiltro, setMarcaFiltro] = useState(null);
+  const [estadoFiltro, setEstadoFiltro] = useState(null);
+
+  const marcas = [
+    { label: 'BMW', value: 'BMW' },
+    { label: 'Mini Cooper', value: 'Mini Cooper' },
+  ];
+
+  const estados = [
+    { label: 'Activo', value: 'Activo' },
+    { label: 'En Mantenimiento', value: 'En Mantenimiento' },
+    { label: 'Inactivo', value: 'Inactivo' },
   ];
 
   useEffect(() => {
     setVehicles([
-      { id: 1, marca: 'BMW', modelo: 'X5', anio: 2020, placa: 'ABC123', propietario: 'Juan Pérez', tipo: 'SUV' },
-      { id: 2, marca: 'Mini', modelo: 'Cooper', anio: 2019, placa: 'XYZ789', propietario: 'María López', tipo: 'Sedán' },
-      // Agrega más vehículos aquí
+      { vehiculo_id: 1, placa: 'ABC123', marca: 'BMW', modelo: 'X5', anio: 2020, vin: '1HGCM82633A123456', color: 'Negro', kilometraje: 30000, ultima_revision: '2023-05-10', estado: 'Activo' },
+      { vehiculo_id: 2, placa: 'XYZ789', marca: 'Mini Cooper', modelo: 'Cooper S', anio: 2019, vin: '1HGCM82633A654321', color: 'Rojo', kilometraje: 25000, ultima_revision: '2023-04-15', estado: 'En Mantenimiento' },
+      { vehiculo_id: 3, placa: 'DEF456', marca: 'BMW', modelo: 'Serie 3', anio: 2018, vin: '1HGCM82633A789012', color: 'Azul', kilometraje: 45000, ultima_revision: '2023-03-22', estado: 'Inactivo' },
+      { vehiculo_id: 4, placa: 'GHI101', marca: 'BMW', modelo: 'Serie 5', anio: 2021, vin: '1HGCM82633A234567', color: 'Blanco', kilometraje: 10000, ultima_revision: '2023-01-12', estado: 'Activo' },
+      { vehiculo_id: 5, placa: 'JKL202', marca: 'Mini Cooper', modelo: 'Countryman', anio: 2017, vin: '1HGCM82633A345678', color: 'Verde', kilometraje: 60000, ultima_revision: '2023-06-05', estado: 'En Mantenimiento' },
+      { vehiculo_id: 6, placa: 'MNO303', marca: 'BMW', modelo: 'X3', anio: 2022, vin: '1HGCM82633A456789', color: 'Gris', kilometraje: 5000, ultima_revision: '2023-07-20', estado: 'Activo' },
+      { vehiculo_id: 7, placa: 'PQR404', marca: 'Mini Cooper', modelo: 'Clubman', anio: 2020, vin: '1HGCM82633A567890', color: 'Amarillo', kilometraje: 35000, ultima_revision: '2023-08-10', estado: 'Activo' },
+      { vehiculo_id: 8, placa: 'STU505', marca: 'BMW', modelo: 'Serie 7', anio: 2019, vin: '1HGCM82633A678901', color: 'Negro', kilometraje: 40000, ultima_revision: '2023-09-15', estado: 'Inactivo' },
     ]);
   }, []);
-
-  const openNew = () => {
-    setVehicle({ marca: '', modelo: '', anio: '', placa: '', propietario: '', tipo: '' });
-    setSelectedVehicle(null);
-    setVehicleDialog(true);
-  };
-
-  const hideDialog = () => {
-    setVehicleDialog(false);
-  };
 
   const hideViewVehicleDialog = () => {
     setViewVehicleDialog(false);
   };
 
-  const hideDeleteVehicleDialog = () => {
-    setDeleteVehicleDialog(false);
-  };
-
-  const saveVehicle = () => {
-    let _vehicles = [...vehicles];
-    if (selectedVehicle) {
-      const index = _vehicles.findIndex((v) => v.id === selectedVehicle.id);
-      _vehicles[index] = vehicle;
-    } else {
-      vehicle.id = Math.floor(Math.random() * 1000) + 1;
-      _vehicles.push(vehicle);
-    }
-    setVehicles(_vehicles);
-    setVehicleDialog(false);
-  };
-
-  const editVehicle = (vehicle) => {
-    setVehicle({ ...vehicle });
-    setSelectedVehicle(vehicle);
-    setVehicleDialog(true);
-  };
-
   const viewVehicle = (vehicle) => {
-    setVehicle({ ...vehicle });
+    setSelectedVehicle(vehicle);
     setViewVehicleDialog(true);
   };
 
-  const confirmDeleteVehicle = (vehicle) => {
-    setVehicle(vehicle);
-    setDeleteVehicleDialog(true);
-  };
+  const filteredVehicles = vehicles.filter(vehicle => 
+    (!marcaFiltro || vehicle.marca === marcaFiltro) &&
+    (!estadoFiltro || vehicle.estado === estadoFiltro)
+  );
 
-  const deleteVehicle = () => {
-    let _vehicles = vehicles.filter((v) => v.id !== vehicle.id);
-    setVehicles(_vehicles);
-    setDeleteVehicleDialog(false);
-    setVehicle({ marca: '', modelo: '', anio: '', placa: '', propietario: '', tipo: '' });
-  };
+  const header = (
+    <div className="table-header">
+      <Dropdown
+        value={marcaFiltro}
+        options={marcas}
+        onChange={(e) => setMarcaFiltro(e.value)}
+        placeholder="Filtrar por Marca"
+      />
+      <Dropdown
+        value={estadoFiltro}
+        options={estados}
+        onChange={(e) => setEstadoFiltro(e.value)}
+        placeholder="Filtrar por Estado"
+      />
+      <InputText
+        value={globalFilter}
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        placeholder="Buscar Vehículo..."
+        className="p-input-icon-left"
+      />
+    </div>
+  );
+
+  const actionTemplate = (rowData) => (
+    <div className="action-buttons">
+      <Button icon="pi pi-eye" className="p-button-rounded p-button-info" onClick={() => viewVehicle(rowData)} />
+    </div>
+  );
 
   return (
     <div>
-        <AuthenticatedHeader/>
-    <div className='vehicles-container'>
-      <h1>Gestión de Vehículos</h1>
-      <Button label='Nuevo Vehículo' icon='pi pi-plus' className='p-button-success mb-4' onClick={openNew} />
-      <div className='datatable-wrapper'>
-        <DataTable value={vehicles} paginator rows={5} globalFilter={globalFilter} header={<InputText type='search' value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder='Buscar Vehículo...' />}>          
-          <Column field='marca' header='Marca' sortable></Column>
-          <Column field='modelo' header='Modelo' sortable></Column>
-          <Column field='anio' header='Año' sortable></Column>
-          <Column field='placa' header='Placa' sortable></Column>
-          <Column field='propietario' header='Propietario' sortable></Column>
-          <Column
-            header='Acciones'
-            body={(rowData) => (
-              <div className='action-buttons'>
-                <Button icon='pi pi-eye' className='p-button-rounded p-button-info mr-2' onClick={() => viewVehicle(rowData)} />
-                <Button icon='pi pi-pencil' className='p-button-rounded p-button-warning mr-2' onClick={() => editVehicle(rowData)} />
-                <Button icon='pi pi-trash' className='p-button-rounded p-button-danger' onClick={() => confirmDeleteVehicle(rowData)} />
-              </div>
-            )}
-          ></Column>
+      <AuthenticatedHeader />
+      <div className="vehicles-container">
+
+        <DataTable value={filteredVehicles} paginator rows={4} globalFilter={globalFilter} header={header} emptyMessage="No se encontraron vehículos">
+          <Column field="placa" header="Placa" sortable />
+          <Column field="marca" header="Marca" sortable />
+          <Column field="modelo" header="Modelo" sortable />
+          <Column field="anio" header="Año" sortable />
+          <Column field="color" header="Color" sortable />
+          <Column field="kilometraje" header="Kilometraje" sortable />
+          <Column field="ultima_revision" header="Última Revisión" sortable />
+          <Column field="estado" header="Estado" sortable />
         </DataTable>
+
+        {/* Dialogo para ver detalle de vehículo */}
+        <Dialog visible={viewVehicleDialog} header="Detalle del Vehículo" modal style={{ width: '50vw' }} onHide={hideViewVehicleDialog}>
+          {selectedVehicle && (
+            <div>
+              <p><strong>Placa:</strong> {selectedVehicle.placa}</p>
+              <p><strong>Marca:</strong> {selectedVehicle.marca}</p>
+              <p><strong>Modelo:</strong> {selectedVehicle.modelo}</p>
+              <p><strong>Año:</strong> {selectedVehicle.anio}</p>
+              <p><strong>VIN:</strong> {selectedVehicle.vin}</p>
+              <p><strong>Color:</strong> {selectedVehicle.color}</p>
+              <p><strong>Kilometraje:</strong> {selectedVehicle.kilometraje}</p>
+              <p><strong>Última Revisión:</strong> {selectedVehicle.ultima_revision}</p>
+              <p><strong>Estado:</strong> {selectedVehicle.estado}</p>
+              <Button label="Cerrar" icon="pi pi-times" onClick={hideViewVehicleDialog} />
+            </div>
+          )}
+        </Dialog>
       </div>
-      <Dialog visible={vehicleDialog} header={selectedVehicle ? 'Editar Vehículo' : 'Nuevo Vehículo'} modal className='p-fluid' style={{ width: '800px' }} footer={
-        <>
-          <Button label='Cancelar' icon='pi pi-times' className='p-button-text' onClick={hideDialog} />
-          <Button label='Guardar' icon='pi pi-check' className='p-button-text' onClick={saveVehicle} />
-        </>
-      } onHide={hideDialog}>
-        <div className='p-field'>
-          <label htmlFor='marca'>Marca</label>
-          <InputText id='marca' value={vehicle.marca} onChange={(e) => setVehicle({ ...vehicle, marca: e.target.value })} required autoFocus />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='modelo'>Modelo</label>
-          <InputText id='modelo' value={vehicle.modelo} onChange={(e) => setVehicle({ ...vehicle, modelo: e.target.value })} required />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='anio'>Año</label>
-          <InputText id='anio' value={vehicle.anio} onChange={(e) => setVehicle({ ...vehicle, anio: e.target.value })} required />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='placa'>Placa</label>
-          <InputText id='placa' value={vehicle.placa} onChange={(e) => setVehicle({ ...vehicle, placa: e.target.value })} required />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='propietario'>Propietario</label>
-          <InputText id='propietario' value={vehicle.propietario} onChange={(e) => setVehicle({ ...vehicle, propietario: e.target.value })} required />
-        </div>
-        <div className='p-field'>
-          <label htmlFor='tipo'>Tipo</label>
-          <Dropdown id='tipo' value={vehicle.tipo} options={vehicleTypes} onChange={(e) => setVehicle({ ...vehicle, tipo: e.value })} placeholder='Seleccionar Tipo' />
-        </div>
-      </Dialog>
-      <Dialog visible={viewVehicleDialog} header='Detalle del Vehículo' modal className='p-fluid' style={{ width: '800px' }} footer={
-        <>
-          <Button label='Cerrar' icon='pi pi-times' className='p-button-text' onClick={hideViewVehicleDialog} />
-        </>
-      } onHide={hideViewVehicleDialog}>
-        <div className='p-field'>
-          <h3>Marca</h3>
-          <p>{vehicle.marca}</p>
-        </div>
-        <div className='p-field'>
-          <h3>Modelo</h3>
-          <p>{vehicle.modelo}</p>
-        </div>
-        <div className='p-field'>
-          <h3>Año</h3>
-          <p>{vehicle.anio}</p>
-        </div>
-        <div className='p-field'>
-          <h3>Placa</h3>
-          <p>{vehicle.placa}</p>
-        </div>
-        <div className='p-field'>
-          <h3>Propietario</h3>
-          <p>{vehicle.propietario}</p>
-        </div>
-        <div className='p-field'>
-          <h3>Tipo</h3>
-          <p>{vehicle.tipo}</p>
-        </div>
-      </Dialog>
-      <Dialog visible={deleteVehicleDialog} header='Confirmar Eliminación' modal footer={
-        <>
-          <Button label='No' icon='pi pi-times' className='p-button-text' onClick={hideDeleteVehicleDialog} />
-          <Button label='Sí' icon='pi pi-check' className='p-button-text' onClick={deleteVehicle} />
-        </>
-      } onHide={hideDeleteVehicleDialog}>
-        <p>¿Está seguro de que desea eliminar el vehículo <strong>{vehicle.marca} {vehicle.modelo}</strong>?</p>
-      </Dialog>
       <FloatingMenu />
-    </div>
     </div>
   );
 }
